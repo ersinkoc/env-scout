@@ -1,0 +1,58 @@
+{
+  "name": "@oxog/env-scout",
+  "version": "1.0.0",
+  "description": "Comprehensive environment detection for JavaScript runtime environments",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "environment",
+    "detection",
+    "browser",
+    "node",
+    "runtime",
+    "platform",
+    "device",
+    "feature-detection",
+    "typescript",
+    "zero-dependency"
+  ],
+  "author": "Ersin Koç",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ersinkoc/env-scout.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ersinkoc/env-scout/issues"
+  },
+  "homepage": "https://github.com/ersinkoc/env-scout#readme",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "jsdom": "^23.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

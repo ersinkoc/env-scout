@@ -1,0 +1,21 @@
+# Source files
+src/
+tests/
+
+# Configuration files
+.github/
+.gitignore
+.npmignore
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+
+# Development files
+*.log
+*.tgz
+coverage/
+.DS_Store
+node_modules/
+
+# Keep only dist folder
+!dist/
