@@ -5,6 +5,7 @@ A comprehensive, lightweight, and zero-dependency environment detection library 
 [![npm version](https://img.shields.io/npm/v/@oxog/env-scout.svg)](https://www.npmjs.com/package/@oxog/env-scout)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/ersinkoc/env-scout?utm_source=oss&utm_medium=github&utm_campaign=ersinkoc%2Fenv-scout&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 ## Features
 
