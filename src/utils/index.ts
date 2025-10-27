@@ -47,7 +47,7 @@ function getCached<T>(key: string, fn: () => T): T {
 }
 
 export function getEnvironmentInfo(): EnvironmentInfo {
-  return getCached('environment-info', () => ({
+  return {
     runtime: runtime.getRuntimeEnvironment(),
     browser: browser.getBrowser(),
     os: browser.getOS(),
@@ -81,7 +81,7 @@ export function getEnvironmentInfo(): EnvironmentInfo {
       language: device.getSystemLanguage(),
       timezone: device.getTimezone()
     }
-  }));
+  };
 }
 
 export function isEnvironment(conditions: string[]): boolean {
