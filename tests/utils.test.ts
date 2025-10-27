@@ -1,6 +1,30 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as utils from '../src/utils';
 
+vi.mock('../src/runtime', async (importOriginal) => {
+  const mod = await importOriginal();
+  return {
+    ...mod,
+    getRuntimeEnvironment: () => 'browser',
+    isBrowser: () => true,
+    isNode: () => false,
+  };
+});
+
+vi.mock('../src/features', async (importOriginal) => {
+  const mod = await importOriginal();
+  return {
+    ...mod,
+    checkFeatureSupport: (features) => {
+      const support = {};
+      features.forEach(f => {
+        support[f] = true;
+      });
+      return support;
+    }
+  };
+});
+
 describe('Utility Functions', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -53,11 +77,21 @@ describe('Utility Functions', () => {
       expect(info.network.online).toBe(true);
     });
 
-    it('should cache results for performance', () => {
+    it('should not cache results and reflect updated values', () => {
+      // First call to get initial info
       const info1 = utils.getEnvironmentInfo();
+      expect(info1.screen.width).toBe(1920);
+
+      // Simulate a change in the environment
+      Object.defineProperty(window, 'innerWidth', {
+        value: 1024,
+        configurable: true
+      });
+
+      // Second call should reflect the change
       const info2 = utils.getEnvironmentInfo();
-      
-      expect(info1).toBe(info2); // Same reference due to caching
+      expect(info2.screen.width).toBe(1024);
+      expect(info1).not.toBe(info2);
     });
   });
 
