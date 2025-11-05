@@ -95,17 +95,21 @@ export function isIframe(): boolean {
 }
 
 export function isLocalhost(): boolean {
-  if (typeof window === 'undefined') return false;
-  
-  const hostname = window.location?.hostname || '';
-  return hostname === 'localhost' || 
-         hostname === '127.0.0.1' || 
+  if (typeof window === 'undefined' || !window.location || !window.location.hostname) return false;
+
+  const hostname = window.location.hostname;
+  return hostname === 'localhost' ||
+         hostname === '127.0.0.1' ||
          hostname === '[::1]' ||
          hostname.startsWith('192.168.') ||
          hostname.startsWith('10.');
 }
 
 export function isDevelopment(): boolean {
+  // If NODE_ENV is explicitly set to production, don't override it
+  if (process?.env?.NODE_ENV === 'production' || process?.env?.NODE_ENV === 'prod') {
+    return false;
+  }
   return process?.env?.NODE_ENV === 'development' ||
          process?.env?.NODE_ENV === 'dev' ||
          isLocalhost();
