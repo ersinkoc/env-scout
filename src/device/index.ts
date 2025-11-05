@@ -5,9 +5,9 @@ interface ScreenSize {
 
 export function isMobile(): boolean {
   if (typeof window === 'undefined') return false;
-  
+
   const userAgent = navigator.userAgent || '';
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) ||
+  return /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) ||
          (window.innerWidth <= 768 && isTouchDevice());
 }
 

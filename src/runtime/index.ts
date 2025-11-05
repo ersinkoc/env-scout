@@ -7,9 +7,10 @@ declare global {
     __TAURI__?: any;
     ReactNativeWebView?: any;
   }
-  var Deno: any;
-  var Bun: any;
 }
+
+declare var Deno: any;
+declare var Bun: any;
 
 export function isBrowser(): boolean {
   return typeof window !== 'undefined' && typeof window.document !== 'undefined' && !isJsDom();
@@ -24,15 +25,15 @@ export function isNode(): boolean {
 }
 
 export function isBun(): boolean {
-  return typeof global !== 'undefined' && 
-         typeof global.Bun !== 'undefined' &&
-         global.Bun?.version != null;
+  return typeof globalThis !== 'undefined' &&
+         typeof globalThis.Bun !== 'undefined' &&
+         globalThis.Bun?.version != null;
 }
 
 export function isDeno(): boolean {
-  return typeof global !== 'undefined' && 
-         typeof global.Deno !== 'undefined' &&
-         global.Deno?.version != null;
+  return typeof globalThis !== 'undefined' &&
+         typeof globalThis.Deno !== 'undefined' &&
+         globalThis.Deno?.version != null;
 }
 
 export function isElectron(): boolean {
@@ -58,8 +59,10 @@ export function isCapacitor(): boolean {
 }
 
 export function isCordova(): boolean {
-  return typeof window !== 'undefined' && 
-         (window.cordova != null || document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1);
+  return typeof window !== 'undefined' &&
+         (window.cordova != null ||
+          (typeof document !== 'undefined' && document.URL &&
+           document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1));
 }
 
 export function isTauri(): boolean {

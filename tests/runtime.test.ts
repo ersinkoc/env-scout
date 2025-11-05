@@ -5,15 +5,24 @@ describe('Runtime Detection', () => {
   const originalWindow = global.window;
   const originalProcess = global.process;
   const originalGlobal = global.global;
+  const originalNavigator = global.navigator;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Clear jsdom's userAgent to avoid false positives
+    if (typeof navigator !== 'undefined') {
+      Object.defineProperty(navigator, 'userAgent', {
+        value: '',
+        configurable: true
+      });
+    }
   });
 
   afterEach(() => {
     global.window = originalWindow;
     global.process = originalProcess;
     global.global = originalGlobal;
+    global.navigator = originalNavigator;
   });
 
   describe('isBrowser', () => {
@@ -51,34 +60,37 @@ describe('Runtime Detection', () => {
     });
 
     it('should return false in Bun environment', () => {
-      global.process = { 
+      global.process = {
         versions: { node: '18.0.0' }
       } as any;
-      global.global = { Bun: { version: '1.0.0' } } as any;
+      (globalThis as any).Bun = { version: '1.0.0' };
       expect(runtime.isNode()).toBe(false);
+      delete (globalThis as any).Bun;
     });
   });
 
   describe('isBun', () => {
     it('should return true in Bun environment', () => {
-      global.global = { Bun: { version: '1.0.0' } } as any;
+      (globalThis as any).Bun = { version: '1.0.0' };
       expect(runtime.isBun()).toBe(true);
+      delete (globalThis as any).Bun;
     });
 
     it('should return false when not in Bun', () => {
-      global.global = {} as any;
+      delete (globalThis as any).Bun;
       expect(runtime.isBun()).toBe(false);
     });
   });
 
   describe('isDeno', () => {
     it('should return true in Deno environment', () => {
-      global.global = { Deno: { version: { deno: '1.0.0' } } } as any;
+      (globalThis as any).Deno = { version: { deno: '1.0.0' } };
       expect(runtime.isDeno()).toBe(true);
+      delete (globalThis as any).Deno;
     });
 
     it('should return false when not in Deno', () => {
-      global.global = {} as any;
+      delete (globalThis as any).Deno;
       expect(runtime.isDeno()).toBe(false);
     });
   });

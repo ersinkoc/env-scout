@@ -32,20 +32,6 @@ export interface EnvironmentInfo {
   };
 }
 
-const cache = new Map<string, any>();
-const CACHE_TTL = 60000; // 1 minute
-
-function getCached<T>(key: string, fn: () => T): T {
-  const cached = cache.get(key);
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    return cached.value;
-  }
-  
-  const value = fn();
-  cache.set(key, { value, timestamp: Date.now() });
-  return value;
-}
-
 export function getEnvironmentInfo(): EnvironmentInfo {
   return {
     runtime: runtime.getRuntimeEnvironment(),

@@ -86,7 +86,7 @@ export function isWindows(): boolean {
 
 export function isLinux(): boolean {
   if (typeof navigator === 'undefined') return false;
-  return /Linux/.test(navigator.platform) || (/Linux/.test(getUserAgent()) && !isAndroid());
+  return !isWindows() && !isIos() && ((/Linux/.test(navigator.platform) || /Linux/.test(getUserAgent())) && !isAndroid());
 }
 
 export function isIos(): boolean {
