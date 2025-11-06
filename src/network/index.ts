@@ -39,9 +39,9 @@ export function isSlowConnection(): boolean {
   if (!connection) return false;
   
   const slowTypes = ['slow-2g', '2g'];
-  const effectiveType = connection.effectiveType?.toLowerCase();
-  
-  if (slowTypes.includes(effectiveType)) return true;
+  const effectiveType = connection.effectiveType;
+
+  if (effectiveType && slowTypes.includes(effectiveType.toLowerCase())) return true;
   
   if (connection.downlink && connection.downlink < 1) return true;
   

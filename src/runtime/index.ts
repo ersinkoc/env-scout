@@ -59,10 +59,13 @@ export function isCapacitor(): boolean {
 }
 
 export function isCordova(): boolean {
-  return typeof window !== 'undefined' &&
-         (window.cordova != null ||
-          (typeof document !== 'undefined' && document.URL &&
-           document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1));
+  if (typeof window === 'undefined') return false;
+
+  return window.cordova != null ||
+         (typeof document !== 'undefined' &&
+          document.URL != null &&
+          document.URL.indexOf('http://') === -1 &&
+          document.URL.indexOf('https://') === -1);
 }
 
 export function isTauri(): boolean {

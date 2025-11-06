@@ -50,25 +50,27 @@ export function getDeviceType(): string {
 
 export function getScreenSize(): ScreenSize | null {
   if (typeof window === 'undefined') return null;
-  
+
   return {
-    width: window.innerWidth || document.documentElement?.clientWidth || document.body?.clientWidth || 0,
-    height: window.innerHeight || document.documentElement?.clientHeight || document.body?.clientHeight || 0
+    width: window.innerWidth || (typeof document !== 'undefined' ? (document.documentElement?.clientWidth || document.body?.clientWidth || 0) : 0),
+    height: window.innerHeight || (typeof document !== 'undefined' ? (document.documentElement?.clientHeight || document.body?.clientHeight || 0) : 0)
   };
 }
 
 export function getOrientation(): 'portrait' | 'landscape' | null {
   if (typeof window === 'undefined') return null;
-  
-  const orientation = (screen.orientation?.type || '').toLowerCase();
-  if (orientation.includes('portrait')) return 'portrait';
-  if (orientation.includes('landscape')) return 'landscape';
-  
+
+  if (typeof screen !== 'undefined') {
+    const orientation = (screen.orientation?.type || '').toLowerCase();
+    if (orientation.includes('portrait')) return 'portrait';
+    if (orientation.includes('landscape')) return 'landscape';
+  }
+
   const size = getScreenSize();
   if (size) {
     return size.width > size.height ? 'landscape' : 'portrait';
   }
-  
+
   return null;
 }
 
