@@ -67,16 +67,25 @@ export function getBrowser(): BrowserInfo | null {
 
 export function isHeadlessBrowser(): boolean {
   if (typeof navigator === 'undefined') return false;
-  
-  return /HeadlessChrome/.test(getUserAgent()) ||
-         navigator.webdriver === true ||
-         (navigator.languages?.length === 0) ||
-         !navigator.plugins?.length;
+
+  // Check for explicit headless indicators
+  if (/HeadlessChrome/.test(getUserAgent()) || navigator.webdriver === true) {
+    return true;
+  }
+
+  // Only consider plugins/languages as indicators when combined with other suspicious signs
+  const hasNoLanguages = navigator.languages?.length === 0;
+  const hasNoPlugins = navigator.plugins && navigator.plugins.length === 0;
+
+  // Both must be true for a positive headless detection (reduces false positives)
+  return hasNoLanguages && hasNoPlugins;
 }
 
 export function isMacOs(): boolean {
   if (typeof navigator === 'undefined') return false;
-  return /Mac|iPhone|iPod|iPad/.test(navigator.platform) || /Mac|iPhone|iPod|iPad/.test(getUserAgent());
+  // Only match Mac, not iOS devices (iPhone, iPad, iPod)
+  return /Mac/.test(navigator.platform) && !/iPhone|iPod|iPad/.test(navigator.platform) &&
+         !/iPhone|iPod|iPad/.test(getUserAgent());
 }
 
 export function isWindows(): boolean {

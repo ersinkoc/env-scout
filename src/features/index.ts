@@ -71,16 +71,16 @@ export function isBot(): boolean {
 
 export function isPWA(): boolean {
   if (typeof window === 'undefined') return false;
-  
-  return window.matchMedia('(display-mode: standalone)').matches ||
+
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
          window.navigator.standalone === true ||
-         document.referrer.includes('android-app://');
+         (typeof document !== 'undefined' && document.referrer.includes('android-app://'));
 }
 
 export function isStandalone(): boolean {
   if (typeof window === 'undefined') return false;
-  
-  return window.matchMedia('(display-mode: standalone)').matches ||
+
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
          window.navigator.standalone === true;
 }
 
@@ -107,17 +107,16 @@ export function isLocalhost(): boolean {
 
 export function isDevelopment(): boolean {
   // If NODE_ENV is explicitly set to production, don't override it
-  if (process?.env?.NODE_ENV === 'production' || process?.env?.NODE_ENV === 'prod') {
+  if (typeof process !== 'undefined' && (process?.env?.NODE_ENV === 'production' || process?.env?.NODE_ENV === 'prod')) {
     return false;
   }
-  return process?.env?.NODE_ENV === 'development' ||
-         process?.env?.NODE_ENV === 'dev' ||
+  return (typeof process !== 'undefined' && (process?.env?.NODE_ENV === 'development' || process?.env?.NODE_ENV === 'dev')) ||
          isLocalhost();
 }
 
 export function isProduction(): boolean {
-  return process?.env?.NODE_ENV === 'production' ||
-         process?.env?.NODE_ENV === 'prod';
+  return typeof process !== 'undefined' &&
+         (process?.env?.NODE_ENV === 'production' || process?.env?.NODE_ENV === 'prod');
 }
 
 export function checkFeatureSupport(features: string[]): Record<string, boolean> {
