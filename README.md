@@ -434,3 +434,98 @@ The website is automatically deployed to GitHub Pages from the `main` branch.
 ---
 
 **Made with ❤️ by Ersin Koç**
+
+## 🚀 GitHub Actions - Automatic Deployment
+
+Your project now includes **GitHub Actions** for automatic deployment!
+
+### Workflows Included
+
+1. **Deploy Website** (`.github/workflows/deploy.yml`)
+   - Automatically deploys website to GitHub Pages
+   - Runs on every push to main/master branch
+   - Custom domain: env-scout.oxog.dev
+
+2. **CI Pipeline** (`.github/workflows/ci.yml`)
+   - Runs TypeScript checks
+   - Builds the library
+   - Uploads build artifacts
+
+### Quick Setup
+
+1. **Enable GitHub Pages:**
+   - Go to repository Settings → Pages
+   - Source: **GitHub Actions**
+   - Custom domain: `env-scout.oxog.dev`
+
+2. **Configure DNS:**
+   ```
+   Type: CNAME
+   Name: env-scout
+   Value: ersinkoc.github.io
+   ```
+
+3. **Push to main:**
+```bash
+git add .
+git commit -m "Add GitHub Actions deployment"
+git push origin main
+```
+
+### Website URL
+**🌐 https://env-scout.oxog.dev**
+
+### Actions Dashboard
+Monitor deployments at: https://github.com/ersinkoc/env-scout/actions
+
+---
+
+## 📋 Complete File Structure
+
+```
+env-scout/
+├── .github/
+│   └── workflows/
+│       ├── deploy.yml    # GitHub Pages deployment
+│       └── ci.yml        # Continuous integration
+├── website/              # Website files
+│   ├── index.html        # Main page
+│   ├── 404.html          # 404 page
+│   ├── CNAME            # Custom domain
+│   ├── .nojekyll        # GitHub Pages config
+│   └── README.md        # Website docs
+├── src/                 # Source code
+│   └── runtime/         # Runtime detection
+├── tests/              # Test files
+├── dist/               # Built files
+├── package.json        # v1.0.1
+├── CHANGELOG.md        # Release notes
+├── README.md           # This file
+├── BUG_FIX_REPORT.md   # Bug analysis
+├── SUMMARY.md          # Executive summary
+├── DEPLOYMENT_GUIDE.md # Deployment instructions
+└── GITHUB_PAGES_SETUP.md # GitHub Pages guide
+```
+
+---
+
+## 🎉 Version 1.0.1 Release Notes
+
+### What's Fixed
+- ✅ 7 critical bugs in runtime detection
+- ✅ Enhanced type safety with optional chaining
+- ✅ Improved error handling for edge cases
+- ✅ Replaced deprecated APIs
+- ✅ Added comprehensive test suite
+- ✅ Launched modern website
+- ✅ Added GitHub Actions deployment
+
+### New Features
+- 🌐 Modern responsive website
+- ⚡ GitHub Actions CI/CD
+- 📝 Complete documentation
+- 🔧 Automated deployment
+
+---
+
+**Made with ❤️ by Ersin Koç**
