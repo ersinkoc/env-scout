@@ -263,3 +263,149 @@ describe('Bug Fixes - Regression Tests', () => {
     });
   });
 });
+
+describe('Bug #16: isNode() should use optional chaining for process.versions', () => {
+  it('should not crash when process.versions is undefined', () => {
+    global.process = { versions: undefined } as any;
+    expect(() => runtime.isNode()).not.toThrow();
+    expect(runtime.isNode()).toBe(false);
+    delete global.process;
+  });
+
+  it('should handle process without versions property', () => {
+    global.process = {} as any;
+    expect(() => runtime.isNode()).not.toThrow();
+    expect(runtime.isNode()).toBe(false);
+    delete global.process;
+  });
+
+  it('should still work correctly with valid process.versions.node', () => {
+    global.process = { versions: { node: '18.0.0' } } as any;
+    expect(runtime.isNode()).toBe(true);
+    delete global.process;
+  });
+});
+
+describe('Bug #17: isBun() should use consistent optional chaining', () => {
+  it('should detect Bun correctly without redundant checks', () => {
+    (globalThis as any).Bun = { version: '1.0.0' };
+    expect(runtime.isBun()).toBe(true);
+    delete (globalThis as any).Bun;
+  });
+
+  it('should return false when Bun is undefined', () => {
+    delete (globalThis as any).Bun;
+    expect(runtime.isBun()).toBe(false);
+  });
+
+  it('should return false when Bun.version is undefined', () => {
+    (globalThis as any).Bun = {};
+    expect(runtime.isBun()).toBe(false);
+    delete (globalThis as any).Bun;
+  });
+});
+
+describe('Bug #18: isDeno() should use consistent optional chaining', () => {
+  it('should detect Deno correctly without redundant checks', () => {
+    (globalThis as any).Deno = { version: { deno: '1.0.0' } };
+    expect(runtime.isDeno()).toBe(true);
+    delete (globalThis as any).Deno;
+  });
+
+  it('should return false when Deno is undefined', () => {
+    delete (globalThis as any).Deno;
+    expect(runtime.isDeno()).toBe(false);
+  });
+
+  it('should return false when Deno.version is undefined', () => {
+    (globalThis as any).Deno = {};
+    expect(runtime.isDeno()).toBe(false);
+    delete (globalThis as any).Deno;
+  });
+});
+
+describe('Bug #19: isElectron() should use optional chaining for process.versions', () => {
+  it('should not crash when process.versions is undefined', () => {
+    global.process = { versions: undefined } as any;
+    expect(() => runtime.isElectron()).not.toThrow();
+    expect(runtime.isElectron()).toBe(false);
+    delete global.process;
+  });
+
+  it('should handle process without versions property', () => {
+    global.process = {} as any;
+    expect(() => runtime.isElectron()).not.toThrow();
+    expect(runtime.isElectron()).toBe(false);
+    delete global.process;
+  });
+
+  it('should still work correctly with valid process.versions.electron', () => {
+    global.process = { versions: { electron: '20.0.0' } } as any;
+    expect(runtime.isElectron()).toBe(true);
+    delete global.process;
+  });
+});
+
+describe('Bug #20: isSharedWorker() should check self exists before instanceof', () => {
+  it('should not crash when self is undefined', () => {
+    global.self = undefined as any;
+    expect(() => runtime.isSharedWorker()).not.toThrow();
+    expect(runtime.isSharedWorker()).toBe(false);
+    delete global.self;
+  });
+
+  it('should handle SharedWorkerGlobalScope being undefined', () => {
+    global.self = {} as any;
+    expect(() => runtime.isSharedWorker()).not.toThrow();
+    expect(runtime.isSharedWorker()).toBe(false);
+    delete global.self;
+  });
+});
+
+describe('Bug #21: isServiceWorker() should check self exists before instanceof', () => {
+  it('should not crash when self is undefined', () => {
+    global.self = undefined as any;
+    expect(() => runtime.isServiceWorker()).not.toThrow();
+    expect(runtime.isServiceWorker()).toBe(false);
+    delete global.self;
+  });
+
+  it('should handle ServiceWorkerGlobalScope being undefined', () => {
+    global.self = {} as any;
+    expect(() => runtime.isServiceWorker()).not.toThrow();
+    expect(runtime.isServiceWorker()).toBe(false);
+    delete global.self;
+  });
+});
+
+describe('Bug #22: isCordova() should use document.documentURI instead of deprecated document.URL', () => {
+  it('should not crash when document is undefined', () => {
+    global.window = undefined as any;
+    expect(() => runtime.isCordova()).not.toThrow();
+    expect(runtime.isCordova()).toBe(false);
+    global.window = originalWindow;
+  });
+
+  it('should handle missing document.documentURI', () => {
+    global.document = {} as any;
+    expect(() => runtime.isCordova()).not.toThrow();
+    expect(runtime.isCordova()).toBe(false);
+    global.document = originalNavigator;
+  });
+
+  it('should correctly identify Cordova apps using documentURI', () => {
+    global.document = {
+      documentURI: 'file:///path/to/app/index.html'
+    } as any;
+    expect(runtime.isCordova()).toBe(true);
+    global.document = originalNavigator;
+  });
+
+  it('should return false for http/https URLs', () => {
+    global.document = {
+      documentURI: 'https://example.com/app'
+    } as any;
+    expect(runtime.isCordova()).toBe(false);
+    global.document = originalNavigator;
+  });
+});

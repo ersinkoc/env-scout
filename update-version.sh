@@ -1,3 +1,10 @@
+#!/bin/bash
+
+# Update version in package.json
+sed -i 's/"version": "1.0.0"/"version": "1.0.1"/' package.json
+
+# Update CHANGELOG.md
+cat > CHANGELOG.md << 'CHANGELOG'
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -42,3 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [1.0.1]: https://github.com/ersinkoc/env-scout/releases/tag/v1.0.1
 [1.0.0]: https://github.com/ersinkoc/env-scout/releases/tag/v1.0.0
+CHANGELOG
+
+echo "✅ Version and CHANGELOG updated successfully"

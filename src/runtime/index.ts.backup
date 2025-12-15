@@ -17,25 +17,29 @@ export function isBrowser(): boolean {
 }
 
 export function isNode(): boolean {
-  return typeof process !== 'undefined' &&
-         process.versions?.node != null &&
+  return typeof process !== 'undefined' && 
+         process.versions != null && 
+         process.versions.node != null &&
          !isBun() &&
          !isDeno();
 }
 
 export function isBun(): boolean {
   return typeof globalThis !== 'undefined' &&
+         typeof globalThis.Bun !== 'undefined' &&
          globalThis.Bun?.version != null;
 }
 
 export function isDeno(): boolean {
   return typeof globalThis !== 'undefined' &&
+         typeof globalThis.Deno !== 'undefined' &&
          globalThis.Deno?.version != null;
 }
 
 export function isElectron(): boolean {
-  return typeof process !== 'undefined' &&
-         process.versions?.electron != null;
+  return typeof process !== 'undefined' && 
+         process.versions != null && 
+         process.versions.electron != null;
 }
 
 export function isJsDom(): boolean {
@@ -59,9 +63,9 @@ export function isCordova(): boolean {
 
   return window.cordova != null ||
          (typeof document !== 'undefined' &&
-          document.documentURI != null &&
-          document.documentURI.indexOf('http://') === -1 &&
-          document.documentURI.indexOf('https://') === -1);
+          document.URL != null &&
+          document.URL.indexOf('http://') === -1 &&
+          document.URL.indexOf('https://') === -1);
 }
 
 export function isTauri(): boolean {
@@ -82,16 +86,14 @@ export function isDedicatedWorker(): boolean {
 }
 
 export function isSharedWorker(): boolean {
-  return isWebWorker() &&
+  return isWebWorker() && 
          typeof SharedWorkerGlobalScope !== 'undefined' &&
-         typeof self !== 'undefined' &&
          self instanceof SharedWorkerGlobalScope;
 }
 
 export function isServiceWorker(): boolean {
-  return isWebWorker() &&
+  return isWebWorker() && 
          typeof ServiceWorkerGlobalScope !== 'undefined' &&
-         typeof self !== 'undefined' &&
          self instanceof ServiceWorkerGlobalScope;
 }
 

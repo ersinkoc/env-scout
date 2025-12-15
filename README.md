@@ -364,3 +364,73 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [GitHub Repository](https://github.com/ersinkoc/env-scout)
 - [NPM Package](https://www.npmjs.com/package/@oxog/env-scout)
 - [Bug Reports](https://github.com/ersinkoc/env-scout/issues)
+
+## Website
+
+We now have a beautiful, modern website for EnvScout! 🎉
+
+**Live Website**: [https://env-scout.oxog.dev](https://env-scout.oxog.dev)
+
+### Website Features
+
+- **Modern Design**: Built with Tailwind CSS
+- **Fully Responsive**: Works on all devices
+- **Interactive**: Powered by Alpine.js
+- **Live Environment Detection**: Real-time demo
+- **Complete Documentation**: API reference and examples
+- **GitHub Integration**: Direct links to repository and issues
+
+### Sections
+
+1. **Hero Section** - Eye-catching introduction with live environment detection
+2. **Features** - Showcase of library capabilities
+3. **API Reference** - Complete function documentation
+4. **Code Examples** - Real-world usage examples
+5. **Statistics** - Version and dependency info
+6. **Call-to-Action** - Quick installation guide
+
+### Local Development
+
+To run the website locally:
+
+```bash
+cd website
+python -m http.server 8000
+# or
+npx serve
+```
+
+Then open `http://localhost:8000` in your browser.
+
+### Deployment
+
+The website is automatically deployed to GitHub Pages from the `main` branch.
+
+**Domain**: env-scout.oxog.dev
+
+---
+
+## Recent Updates
+
+### Version 1.0.1 (December 15, 2025)
+
+- ✅ Fixed 7 critical bugs in runtime detection
+- ✅ Enhanced type safety with optional chaining
+- ✅ Improved error handling for edge cases
+- ✅ Replaced deprecated APIs
+- ✅ Added comprehensive test suite
+- ✅ Created modern website
+
+### What's Fixed
+
+- `isNode()` - Added optional chaining for process.versions
+- `isBun()` - Simplified optional chaining pattern
+- `isDeno()` - Simplified optional chaining pattern
+- `isElectron()` - Added optional chaining for process.versions
+- `isSharedWorker()` - Added self null check
+- `isServiceWorker()` - Added self null check
+- `isCordova()` - Replaced deprecated document.URL
+
+---
+
+**Made with ❤️ by Ersin Koç**

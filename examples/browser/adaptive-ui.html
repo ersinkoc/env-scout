@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive UI with @oxog/env-scout</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Base styles */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .content {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .feature-grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* These styles will be dynamically applied based on detection */
+        .mobile-layout { display: none; }
+        .desktop-layout { display: none; }
+        .touch-optimized { display: none; }
+        .reduced-motion { display: none; }
+        .slow-connection { display: none; }
+        .high-performance { display: none; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav" id="main-nav">
+            <h1>Adaptive UI Demo</h1>
+            <div id="nav-controls"></div>
+        </nav>
+
+        <div class="content">
+            <h2>Environment-Aware Interface</h2>
+            <p id="device-message"></p>
+            
+            <div id="adaptive-content"></div>
+
+            <div class="feature-grid" id="feature-grid">
+                <!-- Features will be dynamically added based on device capabilities -->
+            </div>
+
+            <div id="performance-settings"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@oxog/env-scout/dist/index.js"></script>
+    <script>
+        const {
+            isMobile, isTablet, isDesktop, isTouchDevice,
+            isDarkMode, prefersReducedMotion, isSlowConnection,
+            hasWebGL2, hasWebAssembly, isRetina, getScreenSize,
+            isEnvironment, getDeviceType, getBrowser, getOS,
+            isPWA, isOnline, checkFeatureSupport
+        } = window.EnvScout;
+
+        class AdaptiveUI {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.applyDeviceOptimizations();
+                this.setupNavigation();
+                this.loadContent();
+                this.applyPerformanceSettings();
+                this.setupEventListeners();
+            }
+
+            applyDeviceOptimizations() {
+                const body = document.body;
+                
+                // Device-specific classes
+                if (isMobile()) {
+                    body.classList.add('mobile-device');
+                    this.applyMobileStyles();
+                } else if (isTablet()) {
+                    body.classList.add('tablet-device');
+                    this.applyTabletStyles();
+                } else if (isDesktop()) {
+                    body.classList.add('desktop-device');
+                    this.applyDesktopStyles();
+                }
+
+                // Touch optimization
+                if (isTouchDevice()) {
+                    body.classList.add('touch-enabled');
+                    this.optimizeForTouch();
+                }
+
+                // Dark mode
+                if (isDarkMode()) {
+                    body.classList.add('dark-theme');
+                    this.applyDarkTheme();
+                }
+
+                // Reduced motion
+                if (prefersReducedMotion()) {
+                    body.classList.add('reduced-motion');
+                    this.disableAnimations();
+                }
+
+                // Network-aware
+                if (isSlowConnection()) {
+                    body.classList.add('slow-network');
+                    this.optimizeForSlowConnection();
+                }
+
+                // High DPI
+                if (isRetina()) {
+                    body.classList.add('high-dpi');
+                    this.loadHighResAssets();
+                }
+            }
+
+            applyMobileStyles() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .mobile-device .nav {
+                        flex-direction: column;
+                        text-align: center;
+                    }
+                    .mobile-device .feature-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .mobile-device .content {
+                        padding: 10px;
+                    }
+                    .mobile-device h1 {
+                        font-size: 1.5rem;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            applyTabletStyles() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .tablet-device .feature-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            applyDesktopStyles() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .desktop-device .feature-grid {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                    .desktop-device .content {
+                        padding: 40px;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            optimizeForTouch() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .touch-enabled button,
+                    .touch-enabled a {
+                        min-height: 44px;
+                        min-width: 44px;
+                        padding: 12px 20px;
+                    }
+                    .touch-enabled .feature-card {
+                        cursor: pointer;
+                        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            applyDarkTheme() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .dark-theme {
+                        background: #1a1a1a;
+                        color: #f0f0f0;
+                    }
+                    .dark-theme .nav {
+                        background: #2d2d2d;
+                    }
+                    .dark-theme .content {
+                        background: #2d2d2d;
+                        color: #f0f0f0;
+                    }
+                    .dark-theme .feature-card {
+                        background: #3d3d3d;
+                        border-color: #4d4d4d;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            disableAnimations() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .reduced-motion * {
+                        animation: none !important;
+                        transition: none !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            optimizeForSlowConnection() {
+                // Disable heavy features
+                console.log('Optimizing for slow connection...');
+                // In real app: disable autoplay, reduce image quality, etc.
+            }
+
+            loadHighResAssets() {
+                // Load 2x assets for retina displays
+                console.log('Loading high-resolution assets...');
+            }
+
+            setupNavigation() {
+                const navControls = document.getElementById('nav-controls');
+                
+                if (isMobile()) {
+                    navControls.innerHTML = `
+                        <button onclick="toggleMenu()">☰ Menu</button>
+                    `;
+                } else {
+                    navControls.innerHTML = `
+                        <a href="#">Home</a>
+                        <a href="#">Features</a>
+                        <a href="#">About</a>
+                        <a href="#">Contact</a>
+                    `;
+                }
+            }
+
+            loadContent() {
+                const deviceMessage = document.getElementById('device-message');
+                const adaptiveContent = document.getElementById('adaptive-content');
+                
+                // Device-specific welcome message
+                deviceMessage.textContent = `Welcome ${getDeviceType()} user! 
+                    You're using ${getBrowser()?.name || 'an unknown browser'} on ${getOS()}.`;
+
+                // Load appropriate content
+                if (isMobile()) {
+                    adaptiveContent.innerHTML = `
+                        <h3>Mobile-Optimized Experience</h3>
+                        <p>Swipe-friendly interface with larger touch targets.</p>
+                    `;
+                } else if (isDesktop()) {
+                    adaptiveContent.innerHTML = `
+                        <h3>Desktop Experience</h3>
+                        <p>Full-featured interface with hover interactions and keyboard shortcuts.</p>
+                    `;
+                }
+
+                // Feature cards based on capabilities
+                this.loadFeatures();
+            }
+
+            loadFeatures() {
+                const grid = document.getElementById('feature-grid');
+                const features = checkFeatureSupport([
+                    'webgl2', 'webassembly', 'serviceworker'
+                ]);
+
+                if (features.webgl2) {
+                    grid.innerHTML += `
+                        <div class="feature-card">
+                            <h4>3D Graphics</h4>
+                            <p>WebGL2 is supported. Enhanced graphics available!</p>
+                        </div>
+                    `;
+                }
+
+                if (features.webassembly) {
+                    grid.innerHTML += `
+                        <div class="feature-card">
+                            <h4>High Performance</h4>
+                            <p>WebAssembly supported for compute-intensive tasks.</p>
+                        </div>
+                    `;
+                }
+
+                if (isPWA()) {
+                    grid.innerHTML += `
+                        <div class="feature-card">
+                            <h4>App Mode</h4>
+                            <p>Running as a Progressive Web App!</p>
+                        </div>
+                    `;
+                }
+
+                if (!isOnline()) {
+                    grid.innerHTML += `
+                        <div class="feature-card" style="background: #ffe6e6;">
+                            <h4>Offline Mode</h4>
+                            <p>You're currently offline. Limited features available.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            applyPerformanceSettings() {
+                const settings = document.getElementById('performance-settings');
+                
+                if (isSlowConnection() || isMobile()) {
+                    settings.innerHTML = `
+                        <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px;">
+                            <strong>Performance Mode:</strong> Optimized for ${isSlowConnection() ? 'slow connection' : 'mobile device'}
+                            <ul>
+                                <li>Reduced animations</li>
+                                <li>Compressed assets</li>
+                                <li>Lazy loading enabled</li>
+                            </ul>
+                        </div>
+                    `;
+                }
+            }
+
+            setupEventListeners() {
+                // Listen for orientation changes
+                window.addEventListener('orientationchange', () => {
+                    console.log('Orientation changed, updating UI...');
+                    this.init();
+                });
+
+                // Listen for online/offline
+                window.addEventListener('online', () => {
+                    console.log('Back online!');
+                    location.reload();
+                });
+
+                window.addEventListener('offline', () => {
+                    console.log('Gone offline');
+                    this.loadContent();
+                });
+            }
+        }
+
+        // Initialize adaptive UI
+        const adaptiveUI = new AdaptiveUI();
+
+        // Global functions
+        window.toggleMenu = function() {
+            alert('Menu would toggle here in a real app');
+        };
+    </script>
+</body>
+</html>

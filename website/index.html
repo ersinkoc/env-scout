@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnvScout - Environment Detection Library</title>
+    <meta name="description" content="Comprehensive, lightweight, zero-dependency environment detection library for JavaScript/TypeScript applications.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full z-50" x-data="{ open: false }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-search text-3xl gradient-text"></i>
+                        <span class="ml-2 text-2xl font-bold gradient-text">EnvScout</span>
+                    </div>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="#features" class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition">Features</a>
+                        <a href="#api" class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition">API</a>
+                        <a href="#examples" class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition">Examples</a>
+                        <a href="https://github.com/ersinkoc/env-scout" class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition">GitHub</a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="https://www.npmjs.com/package/@oxog/env-scout" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">npm install</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button @click="open = !open" class="text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div x-show="open" x-transition class="md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white">
+                <a href="#features" class="block text-gray-700 hover:text-purple-600 px-3 py-2">Features</a>
+                <a href="#api" class="block text-gray-700 hover:text-purple-600 px-3 py-2">API</a>
+                <a href="#examples" class="block text-gray-700 hover:text-purple-600 px-3 py-2">Examples</a>
+                <a href="https://github.com/ersinkoc/env-scout" class="block text-gray-700 hover:text-purple-600 px-3 py-2">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg pt-32 pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                    Environment Detection<br>
+                    <span class="text-yellow-300">Made Simple</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-100 mb-8 max-w-3xl mx-auto">
+                    Comprehensive, lightweight, and zero-dependency environment detection library for JavaScript/TypeScript applications.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://www.npmjs.com/package/@oxog/env-scout" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition text-lg">
+                        <i class="fas fa-download mr-2"></i>npm install @oxog/env-scout
+                    </a>
+                    <a href="#examples" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition text-lg">
+                        <i class="fas fa-play mr-2"></i>View Examples
+                    </a>
+                </div>
+
+                <!-- Live Environment Info -->
+                <div class="mt-12 bg-white/10 backdrop-blur-lg rounded-lg p-6 max-w-4xl mx-auto" x-data="envInfo()">
+                    <h3 class="text-white text-xl font-semibold mb-4">Live Environment Detection</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-white">
+                        <div class="bg-white/20 rounded-lg p-4">
+                            <div class="text-sm text-gray-200">Runtime</div>
+                            <div class="text-lg font-semibold" x-text="info.runtime"></div>
+                        </div>
+                        <div class="bg-white/20 rounded-lg p-4">
+                            <div class="text-sm text-gray-200">Browser</div>
+                            <div class="text-lg font-semibold" x-text="info.browser"></div>
+                        </div>
+                        <div class="bg-white/20 rounded-lg p-4">
+                            <div class="text-sm text-gray-200">Device</div>
+                            <div class="text-lg font-semibold" x-text="info.device"></div>
+                        </div>
+                        <div class="bg-white/20 rounded-lg p-4">
+                            <div class="text-sm text-gray-200">Connection</div>
+                            <div class="text-lg font-semibold" x-text="info.connection"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">Powerful Features</h2>
+                <p class="text-xl text-gray-600">Everything you need for environment detection</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-xl border border-purple-100">
+                    <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-code text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Zero Dependencies</h3>
+                    <p class="text-gray-600">No external dependencies. Keep your bundle size minimal and reduce security vulnerabilities.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-100">
+                    <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fab fa-js-square text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">TypeScript Ready</h3>
+                    <p class="text-gray-600">Full TypeScript support with comprehensive type definitions and IntelliSense.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100">
+                    <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-cube text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Tree-Shakeable</h3>
+                    <p class="text-gray-600">Import only what you need. Webpack and Vite will optimize your bundle automatically.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-xl border border-yellow-100">
+                    <div class="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-bolt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Comprehensive Detection</h3>
+                    <p class="text-gray-600">Detect runtime, browser, OS, device, network, and features in one unified API.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-gradient-to-br from-red-50 to-pink-50 p-6 rounded-xl border border-red-100">
+                    <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-globe text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Cross-Platform</h3>
+                    <p class="text-gray-600">Works in browsers, Node.js, Bun, Deno, Electron, and more runtime environments.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-xl border border-indigo-100">
+                    <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-tachometer-alt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Performance Optimized</h3>
+                    <p class="text-gray-600">Automatic caching and lazy evaluation for optimal performance in production.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Documentation Section -->
+    <section id="api" class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">API Reference</h2>
+                <p class="text-xl text-gray-400">Complete list of available functions</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Runtime Detection -->
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-purple-400 font-semibold mb-4 flex items-center">
+                        <i class="fas fa-server mr-2"></i>Runtime Detection
+                    </h3>
+                    <ul class="text-gray-300 space-y-2 text-sm">
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isBrowser()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isNode()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isBun()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isDeno()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isElectron()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isReactNative()</code></li>
+                    </ul>
+                </div>
+
+                <!-- Browser Detection -->
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-blue-400 font-semibold mb-4 flex items-center">
+                        <i class="fab fa-chrome mr-2"></i>Browser Detection
+                    </h3>
+                    <ul class="text-gray-300 space-y-2 text-sm">
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isChrome()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isFirefox()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isSafari()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isEdge()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">getBrowser()</code></li>
+                    </ul>
+                </div>
+
+                <!-- Device Detection -->
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-green-400 font-semibold mb-4 flex items-center">
+                        <i class="fas fa-mobile-alt mr-2"></i>Device Detection
+                    </h3>
+                    <ul class="text-gray-300 space-y-2 text-sm">
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isMobile()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isTablet()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isDesktop()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">isTouchDevice()</code></li>
+                        <li><code class="bg-gray-700 px-2 py-1 rounded">getDeviceType()</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples Section -->
+    <section id="examples" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">Code Examples</h2>
+                <p class="text-xl text-gray-600">See how easy it is to use EnvScout</p>
+            </div>
+
+            <!-- Example 1 -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Basic Usage</h3>
+                <pre><code class="language-typescript">import { isBrowser, getEnvironmentInfo, isEnvironment } from '@oxog/env-scout';
+
+// Simple checks
+if (isBrowser() && isDarkMode()) {
+  // Apply dark theme
+}
+
+// Multiple conditions
+if (isEnvironment(['browser', 'mobile', 'online'])) {
+  // Mobile browser with connection
+}
+
+// Get complete info
+const env = getEnvironmentInfo();
+console.log(env.runtime); // 'browser'</code></pre>
+            </div>
+
+            <!-- Example 2 -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Platform-Specific Code</h3>
+                <pre><code class="language-typescript">import { isEnvironment, getOS } from '@oxog/env-scout';
+
+function getPlatformPath() {
+  if (isEnvironment(['electron', 'windows'])) {
+    return 'C:\\Program Files\\MyApp';
+  } else if (isEnvironment(['electron', 'macos'])) {
+    return '/Applications/MyApp.app';
+  }
+  return './';
+}</code></pre>
+            </div>
+
+            <!-- Example 3 -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Feature Detection</h3>
+                <pre><code class="language-typescript">import { checkFeatureSupport } from '@oxog/env-scout';
+
+const features = checkFeatureSupport(['webgl', 'webassembly']);
+
+if (features.webgl && features.webassembly) {
+  // Load advanced features
+} else {
+  // Load fallback version
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 gradient-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center text-white">
+                <div>
+                    <div class="text-4xl font-bold mb-2">1.0.1</div>
+                    <div class="text-gray-200">Current Version</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">0</div>
+                    <div class="text-gray-200">Dependencies</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">100%</div>
+                    <div class="text-gray-200">Type Safety</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">MIT</div>
+                    <div class="text-gray-200">License</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6">Ready to Get Started?</h2>
+            <p class="text-xl text-gray-600 mb-8">Start detecting environments with just a few lines of code.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://www.npmjs.com/package/@oxog/env-scout" class="bg-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-purple-700 transition text-lg">
+                    <i class="fas fa-download mr-2"></i>npm install @oxog/env-scout
+                </a>
+                <a href="https://github.com/ersinkoc/env-scout" class="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-purple-600 hover:text-white transition text-lg">
+                    <i class="fab fa-github mr-2"></i>View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-search text-3xl gradient-text"></i>
+                        <span class="ml-2 text-2xl font-bold gradient-text">EnvScout</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Comprehensive environment detection for JavaScript/TypeScript applications.</p>
+                    <div class="flex space-x-4">
+                        <a href="https://github.com/ersinkoc/env-scout" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-github text-2xl"></i>
+                        </a>
+                        <a href="https://www.npmjs.com/package/@oxog/env-scout" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-npm text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Documentation</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#api" class="hover:text-white transition">API Reference</a></li>
+                        <li><a href="#examples" class="hover:text-white transition">Examples</a></li>
+                        <li><a href="https://github.com/ersinkoc/env-scout/blob/main/README.md" class="hover:text-white transition">README</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Community</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="https://github.com/ersinkoc/env-scout/issues" class="hover:text-white transition">Issues</a></li>
+                        <li><a href="https://github.com/ersinkoc/env-scout/pulls" class="hover:text-white transition">Pull Requests</a></li>
+                        <li><a href="https://github.com/ersinkoc/env-scout/discussions" class="hover:text-white transition">Discussions</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 EnvScout by Ersin Koç. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Environment Info Component -->
+    <script>
+        function envInfo() {
+            return {
+                info: {
+                    runtime: 'Loading...',
+                    browser: 'Loading...',
+                    device: 'Loading...',
+                    connection: 'Loading...'
+                },
+                init() {
+                    // This would normally use the actual EnvScout library
+                    // For demo purposes, we'll simulate the data
+                    this.info.runtime = navigator.userAgent.includes('Node') ? 'Node.js' : 'Browser';
+                    this.info.browser = this.detectBrowser();
+                    this.info.device = window.innerWidth < 768 ? 'Mobile' : window.innerWidth < 1024 ? 'Tablet' : 'Desktop';
+                    this.info.connection = navigator.onLine ? 'Online' : 'Offline';
+                },
+                detectBrowser() {
+                    const ua = navigator.userAgent;
+                    if (ua.includes('Chrome')) return 'Chrome';
+                    if (ua.includes('Firefox')) return 'Firefox';
+                    if (ua.includes('Safari')) return 'Safari';
+                    if (ua.includes('Edge')) return 'Edge';
+                    return 'Unknown';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
